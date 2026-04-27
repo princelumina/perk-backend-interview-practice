@@ -1,14 +1,16 @@
 from http.client import HTTPException
 
 import requests
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
 USERS_API_URL = "https://dummyjson.com/users"
 
 @app.get("/users")
-def read_users():
+def read_users(min_age: int | None = None):
+    if min_age is not None and min_age < 0:
+        raise HTTPException(status_code=400, detail="Min age cannot be negative")
     try:
         response = requests.get(USERS_API_URL, timeout=5)
         response.raise_for_status()
@@ -28,5 +30,5 @@ def read_users():
             "company": user.get("company", {}).get("name"),
             "country": user.get("address", {}).get("country"),
         }
-        for user in users
+        for user in users if min_age is None or user.get("age") >= min_age
     ]
