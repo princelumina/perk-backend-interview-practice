@@ -10,7 +10,7 @@ class Client(Protocol):
     def get_users(self) -> dict: ...
 
 
-class RequestsClient(Client):
+class RequestsClient:
     def get_users(self) -> dict:
         try:
             response = requests.get(USERS_API_URL, timeout=API_TIMEOUT)

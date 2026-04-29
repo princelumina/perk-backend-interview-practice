@@ -6,3 +6,6 @@ run:
 lint:
 	@uv run ruff check --select I --fix
 	@uv run ruff check --fix
+
+test:
+	@uv run pytest
